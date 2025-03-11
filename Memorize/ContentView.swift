@@ -10,11 +10,12 @@ import SwiftUI
 
 
 struct ContentView: View {
-    let purpleTheme = ["😈", "🍆", "💜", "👾", "💟", "✝️", "🛐", "🔮", "☂️", "🕺"]
+    let purpleTheme = ["😈", "🍆", "💜", "👾", "🔮"]
     let greenTheme = ["🤢", "🐉", "🐍", "🍀", "🦖", "💚"]
     let blueTheme = ["🧿", "💙", "🔵", "🌊", "💤", "🌀"]
     
-    @State var selectedTheme: [String] = []
+    @State var selectedCardColor: Color?
+    @State var duplicatedAndShuffledCards: [String]?
     
     var body: some View {
         VStack {
@@ -38,17 +39,20 @@ struct ContentView: View {
     var cards: some View {
         ScrollView {
             LazyVGrid(columns: [GridItem(.adaptive(minimum: 100))]) {
-                ForEach(selectedTheme, id: \.self) { theme in
-                    CardView(content: theme)
+                if let duplicatedAndShuffledCards {
+                    ForEach(duplicatedAndShuffledCards.indices, id: \.self) { index in
+                        CardView(content: duplicatedAndShuffledCards[index], cardColor: selectedCardColor ?? .white)
+                    }
+                    .padding()
                 }
-                .padding()
             }
         }
     }
     
     func themeChooser(theme: [String], buttonColor: Color = .blue) -> some View {
         Button(action: {
-            selectedTheme = theme
+            selectedCardColor = buttonColor
+            duplicatedAndShuffledCards = (theme + theme).shuffled()
         }, label: {
             Image(systemName: "circle.fill")
                 .foregroundColor(buttonColor)
@@ -72,6 +76,7 @@ struct ContentView: View {
 
 struct CardView: View {
     let content: String
+    let cardColor: Color
     
     @State var isFlipped: Bool = false
     
@@ -79,10 +84,10 @@ struct CardView: View {
         ZStack {
             Circle()
                 .fill(.white)
-                .stroke(.purple, lineWidth: 3)
+                .stroke(cardColor, lineWidth: 3)
             Text(content).font(.largeTitle)
             Circle()
-                .fill(.purple)
+                .fill(cardColor)
                 .opacity(isFlipped ? 1 : 0)
         }
         .onTapGesture {
@@ -90,6 +95,9 @@ struct CardView: View {
         }
     }
 }
+
+
+
 
 
 
