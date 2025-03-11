@@ -10,35 +10,64 @@ import SwiftUI
 
 
 struct ContentView: View {
-    let HalloweenTheme = ["🎃", "🧙‍♀️", "👻", "🧹"]
+    let purpleTheme = ["😈", "🍆", "💜", "👾", "💟", "✝️", "🛐", "🔮", "☂️", "🕺"]
+    let greenTheme = ["🤢", "🐉", "🐍", "🍀", "🦖", "💚"]
+    let blueTheme = ["🧿", "💙", "🔵", "🌊", "💤", "🌀"]
+    
+    @State var selectedTheme: [String] = []
     
     var body: some View {
         VStack {
             Text("Memorize").font(.title)
             cards
-            themeChooser
+            
+            HStack {
+                Spacer()
+                choosePurpleTheme
+                Spacer()
+                chooseBlueTheme
+                Spacer()
+                chooseGreenTheme
+                Spacer()
+            }
             
         }
         .padding()
     }
     
     var cards: some View {
-        LazyVGrid(columns: [GridItem(.adaptive(minimum: 120))]) {
-            ForEach(HalloweenTheme, id: \.self) { theme in
-                CardView(content: theme)
+        ScrollView {
+            LazyVGrid(columns: [GridItem(.adaptive(minimum: 100))]) {
+                ForEach(selectedTheme, id: \.self) { theme in
+                    CardView(content: theme)
+                }
+                .padding()
             }
         }
     }
     
-    var themeChooser:  some View {
+    func themeChooser(theme: [String], buttonColor: Color = .blue) -> some View {
         Button(action: {
-            print("hello")
+            selectedTheme = theme
         }, label: {
-            Image(systemName: "1.lane")
+            Image(systemName: "circle.fill")
+                .foregroundColor(buttonColor)
+                .font(.title)
         })
     }
+    
+    var choosePurpleTheme:  some View {
+        themeChooser(theme: purpleTheme, buttonColor: Color.purple)
+    }
+    
+    var chooseBlueTheme:  some View {
+        themeChooser(theme: blueTheme, buttonColor: Color.blue)
+    }
+    
+    var chooseGreenTheme:  some View {
+        themeChooser(theme: greenTheme, buttonColor: Color.green)
+    }
 }
-
 
 
 struct CardView: View {
