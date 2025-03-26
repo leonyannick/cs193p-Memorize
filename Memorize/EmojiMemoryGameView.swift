@@ -10,14 +10,11 @@ import SwiftUI
 
 
 struct EmojiMemoryGameView: View {
-    var emojiGame = EmojiMemoryGame()
+    @ObservedObject var emojiGame: EmojiMemoryGame
     
     let purpleTheme = ["😈", "🍆", "💜", "👾", "🔮"]
     let greenTheme = ["🤢", "🐉", "🐍", "🍀", "🦖", "💚"]
     let blueTheme = ["🧿", "💙", "🔵", "🌊", "💤", "🌀"]
-    
-    @State var selectedCardColor: Color?
-    @State var duplicatedAndShuffledCards: [String]?
     
     var body: some View {
         VStack {
@@ -30,38 +27,36 @@ struct EmojiMemoryGameView: View {
         ScrollView {
             LazyVGrid(columns: [GridItem(.adaptive(minimum: 100))]) {
                 ForEach(emojiGame.cards) { card in
-                    CardView(content: card.content, cardColor: .green)
+                    CardView(card: card)
+                        .onTapGesture {
+                            emojiGame.choose(card)
+                            print(card)
+                        }
                 }
                 .padding()
+               
             }
         }
     }
-    
-  
-    
-   
 }
 
 
 struct CardView: View {
-    let content: String
-    let cardColor: Color
-    
-    @State var isFlipped: Bool = false
+    let card: MemoryGame<String>.Card
+    let cardColor = Color.blue
     
     var body: some View {
         ZStack {
             Circle()
                 .fill(.white)
                 .stroke(cardColor, lineWidth: 3)
-            Text(content).font(.largeTitle)
+            Text(card.content).font(.largeTitle)
             Circle()
                 .fill(cardColor)
-                .opacity(isFlipped ? 1 : 0)
+                .opacity(card.isFaceUp ? 0 : 1)
+                
         }
-        .onTapGesture {
-            isFlipped.toggle()
-        }
+            .opacity(card.isMatched ? 0 : 1)
     }
 }
 
@@ -75,5 +70,5 @@ struct CardView: View {
 
 
 #Preview {
-    EmojiMemoryGameView()
+    EmojiMemoryGameView(emojiGame: EmojiMemoryGame())
 }

@@ -13,10 +13,14 @@ func emojiCardContentFactory(_ index: Int) -> String {
     else { return "‼" }
 }
 
-class EmojiMemoryGame {
-    private var game = MemoryGame<String>(numberOfPairs: 6, cardContentFactory: emojiCardContentFactory)
+class EmojiMemoryGame: ObservableObject {
+    @Published private var game = MemoryGame<String>(numberOfPairs: 8, cardContentFactory: emojiCardContentFactory)
     
     var cards: [MemoryGame<String>.Card] {
         return game.cards
+    }
+    
+    func choose(_ card: MemoryGame<String>.Card) {
+        game.choose(card)
     }
 }

@@ -19,15 +19,52 @@ struct MemoryGame<CardContent: Equatable> {
         }
     }
     
-    mutating func choose(_ card: Card) {
-        
+    private var indexOfOneAndOnlyFaceUpCard: Int? {
+        get {
+            print("get triggered")
+            return cards.indices.filter { cards[$0].isFaceUp }.only
+            
+        }
+        set {
+            print("set triggered")
+            cards.indices.forEach { index in
+                cards[index].isFaceUp = (newValue == index)
+            }
+        }
     }
     
-    struct Card: Identifiable {
+    
+    mutating func choose(_ card: Card) {
+        if let chosenIndex = cards.firstIndex(where: { $0.id == card.id }) {
+            if !cards[chosenIndex].isMatched && !cards[chosenIndex].isFaceUp {
+                if let indexOfOneAndOnlyFaceUpCard {
+                    if (cards[chosenIndex].content == cards[indexOfOneAndOnlyFaceUpCard].content) {
+                        cards[chosenIndex].isMatched = true
+                        cards[indexOfOneAndOnlyFaceUpCard].isMatched = true
+                    }
+                } else {
+                    indexOfOneAndOnlyFaceUpCard = chosenIndex
+                }
+                cards[chosenIndex].isFaceUp = true
+            }
+        }
+    }
+    
+    struct Card: Identifiable, CustomDebugStringConvertible {
         var id: String
-        var isFaceUp = true
+        var isFaceUp = false
         var isMatched = false
-        var content: CardContent
+        let content: CardContent
+        
+        var debugDescription: String {
+                "\(id), \(content), \(isFaceUp ? "up" : "down"), \(isMatched ? "matched" : "not matched")"
+        }
+    }
+}
+
+extension Array {
+    var only: Element? {
+        return count == 1 ? first : nil
     }
 }
 
