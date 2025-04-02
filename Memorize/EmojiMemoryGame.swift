@@ -7,20 +7,51 @@
 
 import SwiftUI
 
-func emojiCardContentFactory(_ index: Int) -> String {
-    let greenTheme = ["🤢", "🐉", "🐍", "🍀", "🦖", "💚"]
-    if (index >= 0 && index < greenTheme.count) { return greenTheme[index] }
-    else { return "‼" }
-}
-
 class EmojiMemoryGame: ObservableObject {
-    @Published private var game = MemoryGame<String>(numberOfPairs: 8, cardContentFactory: emojiCardContentFactory)
+    @Published private var game: MemoryGame<String>
+    private var theme: MemoryGameTheme
     
-    var cards: [MemoryGame<String>.Card] {
-        return game.cards
+    init() {
+        theme = MemoryGameTheme()
+        game = EmojiMemoryGame.createMemoryGame(numberOfPairs: theme.numberOfPairs, cardContentFactory: theme.cardContentFactory)
     }
+    
+    static func createMemoryGame(numberOfPairs: Int, cardContentFactory: (Int) -> String) -> MemoryGame<String> {
+        return MemoryGame<String>(numberOfPairs: numberOfPairs, cardContentFactory: cardContentFactory)
+    }
+    
+    var cards: [MemoryGame<String>.Card] { game.cards }
+    
+    var themeColor: Color {
+        let colorMap: [String: Color] = [
+            "red": .red,
+            "orange": .orange,
+            "yellow": .yellow,
+            "green": .green,
+            "blue": .blue,
+            "purple": .purple,
+            "pink": .pink,
+            "brown": .brown,
+            "black": .black,
+            "white": .white,
+            "gray": .gray,
+            "teal": .teal,
+            "cyan": .cyan,
+            "mint": .mint,
+            "indigo": .indigo
+        ]
+        
+        return colorMap[theme.color] ?? .gray
+    }
+    
+    var themeName: String { theme.name }
     
     func choose(_ card: MemoryGame<String>.Card) {
         game.choose(card)
+    }
+    
+    func newGame() {
+        theme = MemoryGameTheme()
+        game = EmojiMemoryGame.createMemoryGame(numberOfPairs: theme.numberOfPairs, cardContentFactory: theme.cardContentFactory)
     }
 }

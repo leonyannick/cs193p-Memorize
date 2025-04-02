@@ -17,6 +17,7 @@ struct MemoryGame<CardContent: Equatable> {
             cards.append(Card(id: "\(pairIndex)a", content: content))
             cards.append(Card(id: "\(pairIndex)b", content: content))
         }
+        cards = cards.shuffled()
     }
     
     private var indexOfOneAndOnlyFaceUpCard: Int? {
@@ -50,7 +51,7 @@ struct MemoryGame<CardContent: Equatable> {
         }
     }
     
-    struct Card: Identifiable, CustomDebugStringConvertible {
+    struct Card: Equatable, Identifiable, CustomDebugStringConvertible {
         var id: String
         var isFaceUp = false
         var isMatched = false
