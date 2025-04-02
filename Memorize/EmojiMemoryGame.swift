@@ -22,6 +22,8 @@ class EmojiMemoryGame: ObservableObject {
     
     var cards: [MemoryGame<String>.Card] { game.cards }
     
+    var score: Int { game.score }
+    
     var themeColor: Color {
         let colorMap: [String: Color] = [
             "red": .red,

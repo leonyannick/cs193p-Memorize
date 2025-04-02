@@ -12,12 +12,21 @@ struct EmojiMemoryGameView: View {
     
     var body: some View {
         VStack {
-            themeInfo
+            HStack {
+                themeInfo
+                Spacer()
+                score
+            }
             cards
-                .animation(.default, value: emojiGame.cards)
             newGameButton
         }
         .padding()
+    }
+    
+    var score: some View {
+        Text("Score: \(emojiGame.score)")
+            .foregroundColor(.black)
+            .font(.title)
     }
     
     var themeInfo: some View {
@@ -49,8 +58,9 @@ struct EmojiMemoryGameView: View {
                         .padding(4)
                 }
             }
-            .foregroundColor(emojiGame.themeColor)
+                .foregroundColor(emojiGame.themeColor)
         }
+            .animation(.default, value: emojiGame.cards)
     }
 }
 
@@ -79,12 +89,6 @@ struct CardView: View {
         .opacity(card.isFaceUp || !card.isMatched ? 1 : 0)
     }
 }
-
-
-
-
-
-
 
 
 #Preview {
