@@ -20,13 +20,12 @@ struct MemoryGame<CardContent: Equatable> {
         }
         cards = cards.shuffled()
     }
-    
+
     private var indexOfOneAndOnlyFaceUpCard: Int? {
         get {
             return cards.indices.filter { cards[$0].isFaceUp }.only
         }
         set {
-            print("cards turned back")
             cards.indices.forEach { index in
                 cards[index].isFaceUp = (newValue == index)
             }

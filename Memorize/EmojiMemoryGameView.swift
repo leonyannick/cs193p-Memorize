@@ -30,7 +30,7 @@ struct EmojiMemoryGameView: View {
     }
     
     var themeInfo: some View {
-        Text(emojiGame.themeName)
+        Text("Theme: \(emojiGame.themeName)")
             .foregroundColor(emojiGame.themeColor)
             .font(.title)
     }
@@ -77,16 +77,18 @@ struct CardView: View {
                     .strokeBorder(lineWidth: 3)
                 Text(card.content)
                     .font(.system(size: 100))
-                    .minimumScaleFactor(0.001)
+                    .minimumScaleFactor(0.01)
                     .aspectRatio(1, contentMode: .fit)
                     .scaledToFit()
             }
             .opacity(card.isFaceUp ? 1 : 0)
-            
             Circle()
                 .opacity(card.isFaceUp ? 0 : 1)
         }
         .opacity(card.isFaceUp || !card.isMatched ? 1 : 0)
+        .rotation3DEffect(.degrees(card.isFaceUp ? 0 : 180),
+                            axis: (0, 1, 0))
+        .animation(.easeInOut(duration: 0.3), value: card.isFaceUp)
     }
 }
 
