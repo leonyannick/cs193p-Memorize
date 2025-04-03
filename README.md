@@ -10,11 +10,15 @@ Memorize is a small iOS game I created for the course cs193p. The goal is to mat
 - Animations - Flipping cards and shuffling is animated.
 
 ## Screenshots
-    ![Screenshot](images/memorize_screenshot.png)
+
+<img src="images/memorize_screenshot.png" style="width:30%;">
 
 ## Installation
     
-1.    Clone the repository: git clone https://github.com/yourusername/memorize-game.git
+1.    Clone the repository:
+```bash
+git clone https://github.com/leonyannick/cs193p-Memorize.git
+```
 2.    Open the project in Xcode.
 3.    Run on an iOS Simulator or a physical device.
 
